@@ -10,6 +10,7 @@ from ultralytics import YOLO
 labels = ['1 RIBU ASLI', '1 RIBU PALSU', '10 RIBU ASLI', '10 RIBU PALSU', 
          '100 RIBU ASLI', '100 RIBU PALSU', '20 RIBU ASLI', '20 RIBU PALSU', 
          '5 RIBU ASLI', '5 RIBU PALSU', '50 RIBU ASLI', '50 RIBU PALSU']
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 def load_pickle(file_path):
     with open(file_path, 'rb') as file:
@@ -77,7 +78,7 @@ def load_pt(model_name=None):
         model = ResNet50()
         # model = VGG19()
         model.load_state_dict(torch.load('resnet50-4.pth'))
-        model = model.to('cuda')
+        model = model.to(device)
         model.eval()
     if model_name == "YoLoV11":
         model = YOLO("last-4.pt")
