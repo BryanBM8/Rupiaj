@@ -2,6 +2,9 @@ import pickle
 import cv2
 import numpy as np
 import gzip
+import os
+import streamlit as st
+import urllib.request
 
 import torch
 from torchvision import models
@@ -12,7 +15,15 @@ labels = ['1 RIBU ASLI', '1 RIBU PALSU', '10 RIBU ASLI', '10 RIBU PALSU',
          '5 RIBU ASLI', '5 RIBU PALSU', '50 RIBU ASLI', '50 RIBU PALSU']
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
+def check_and_download_model(model_name):
+    if not os.path.exists(model_name):
+        st.write("Downloading model...")
+        url = 'https://github.com/BryanBM8/Rupiaj/releases/download/models/'+model_name
+        urllib.request.urlretrieve(url, model_name)
+        st.write("Downloaded model")
+
 def load_pickle(file_path):
+    check_and_download_model(file_path)
     with open(file_path, 'rb') as file:
         return pickle.load(file)
 
@@ -75,11 +86,15 @@ class VGG19(torch.nn.Module):
 
 def load_pt(model_name=None):
     if model_name == "ResNet50":
+        model_file = "resnet50-4.pth"
         model = ResNet50()
         # model = VGG19()
-        model.load_state_dict(torch.load('resnet50-4.pth', map_location=torch.device(device)))
+        check_and_download_model(model_file)
+        model.load_state_dict(torch.load(model_file, map_location=torch.device(device)))
         model = model.to(device)
         model.eval()
     if model_name == "YoLoV11":
+        model_file = "last-4.pt"
+        check_and_download_model(model_file)
         model = YOLO("last-4.pt")
     return model
