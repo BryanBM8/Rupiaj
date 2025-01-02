@@ -1,6 +1,6 @@
 import streamlit as st
 import torch
-from utils import load_pickle, extract_features, labels, load_pt
+from utils import load_pickle, color_hist_equalize, extract_features, labels, load_pt
 from camera_input_live import camera_input_live
 import numpy as np
 import cv2
@@ -25,7 +25,7 @@ if image:
   # st.image(image)
   image = np.asarray(bytearray(image.read()), dtype="uint8") 
   image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-  image = cv2.equalizeHist(image)
+  image = color_hist_equalize(image)
   # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
   
   model = state['models'][selection]

@@ -1,5 +1,5 @@
 import streamlit as st
-from utils import load_pickle, extract_features, labels
+from utils import load_pickle, extract_features, labels, color_hist_equalize
 from camera_input_live import camera_input_live
 import numpy as np
 import cv2
@@ -22,7 +22,7 @@ elif mode == "Upload Image":
 if image:
   image = np.asarray(bytearray(image.read()), dtype="uint8") 
   image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-  image = cv2.equalizeHist(image)
+  # image = color_hist_equalize(image)
   # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
   image = cv2.resize(image, (512, 512))
   features = extract_features(image)

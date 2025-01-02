@@ -15,6 +15,12 @@ labels = ['1 RIBU ASLI', '1 RIBU PALSU', '10 RIBU ASLI', '10 RIBU PALSU',
          '5 RIBU ASLI', '5 RIBU PALSU', '50 RIBU ASLI', '50 RIBU PALSU']
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
+def color_hist_equalize(image):
+    image_yuv = cv2.cvtColor(image, cv2.COLOR_BGR2YUV)
+    image_yuv[:,:,0] = cv2.equalizeHist(image_yuv[:,:,0])
+    image = cv2.cvtColor(image_yuv, cv2.COLOR_YUV2BGR)
+    return image
+
 def check_and_download_model(model_name):
     if not os.path.exists(model_name):
         st.write("Downloading model...")
