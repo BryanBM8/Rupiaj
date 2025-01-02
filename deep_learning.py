@@ -25,6 +25,7 @@ if image:
   # st.image(image)
   image = np.asarray(bytearray(image.read()), dtype="uint8") 
   image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+  image = cv2.equalizeHist(image)
   # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
   
   model = state['models'][selection]
@@ -46,7 +47,7 @@ if image:
         st.write(labels[int(pred)])
 
   elif (selection == "YoLoV11"):
-      image = cv2.resize(image, (600, 600))
+      image = cv2.resize(image, (640, 640))
       results = model.predict(image)
       names = model.names
       # st.write(labels[int(pred)])
