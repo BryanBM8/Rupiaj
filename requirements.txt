@@ -6,3 +6,4 @@ streamlit_camera_input_live
 torch
 torchvision
 ultralytics
+scikit-learn
